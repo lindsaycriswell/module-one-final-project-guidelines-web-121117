@@ -63,7 +63,9 @@ def add_songs
     # binding.pry
 
     hash["album"]["tracks"]["track"].each do |track_instance|
-      Song.create(name: (track_instance["name"]),album_id: (Album.where(api_id: album_api_id)))
+      if !(Song.find_by_name(track_instance["name"]))
+        Song.create(name: (track_instance["name"]),album_id: (Album.where(api_id: album_api_id)[0].id))
+      end
     end
   end
 end
@@ -71,7 +73,7 @@ end
 
 
 
-#
-# add_artists
-# add_albums
+
+add_artists
+add_albums
 add_songs
