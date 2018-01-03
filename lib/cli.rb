@@ -150,7 +150,8 @@ end
 def search_song_by_artist(user_instance)
  puts "Please enter the name of the artist"
  response = gets.chomp
- 
+ artist = Artist.where("name LIKE  ?", "%#{response}%")[0]
+ Formatador.display_table(artist.list_songs, ["Song ID", "Name", "Artist", "Listeners"])
 end
 
 # def search_song_by_name(user_instance)
@@ -174,6 +175,7 @@ def song_sub_menu(user_instance)
     puts "Select a playlist by ID, or type 'new' to create a new playlist."
     playlist_selector(user_instance)
   when "3", "return to song menu", "menu"
+    system("clear")
     songs_menu(user_instance)
   else
     puts "please enter a valid command"

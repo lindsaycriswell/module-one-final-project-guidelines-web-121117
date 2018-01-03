@@ -9,4 +9,5 @@ class User < ActiveRecord::Base
     end
     table_data
   end
+
 end
