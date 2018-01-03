@@ -60,7 +60,7 @@ end
 
 
 def add_songs_playcount
-  counter = 100
+  counter = 1
 
   while counter < 200
 
