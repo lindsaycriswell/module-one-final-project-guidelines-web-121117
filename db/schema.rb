@@ -15,6 +15,8 @@ ActiveRecord::Schema.define(version: 20180102190719) do
   create_table "albums", force: :cascade do |t|
     t.string  "name"
     t.integer "artist_id"
+    t.string  "url"
+    t.integer "play_count"
     t.string  "api_id"
   end
 
@@ -26,6 +28,9 @@ ActiveRecord::Schema.define(version: 20180102190719) do
   create_table "songs", force: :cascade do |t|
     t.string  "name"
     t.integer "album_id"
+    t.string  "url"
+    t.integer "play_count"
+    t.integer "listeners"
   end
 
 end
