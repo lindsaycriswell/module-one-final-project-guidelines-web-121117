@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   has_many :playlists
   has_many :songs, through: :playlists
 
-
+#test comment
   def list_playlists
     result = ""
     self.playlists.each do |playlist_instance|
