@@ -3,6 +3,8 @@ require 'json'
 require 'rest-client'
 require 'pry'
 require 'formatador'
+require 'launchy'
+
 
 Bundler.require
 

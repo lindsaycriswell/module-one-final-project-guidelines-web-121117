@@ -1,6 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    RubyInline (3.12.4)
+      ZenTest (~> 4.3)
+    ZenTest (4.11.1)
     activemodel (5.1.4)
       activesupport (= 5.1.4)
     activerecord (5.1.4)
@@ -12,22 +15,29 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
     concurrent-ruby (1.0.5)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
     formatador (0.2.5)
+    fuzzy-string-match (1.0.1)
+      RubyInline (>= 3.8.6)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     json (2.1.0)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
     minitest (5.11.1)
     mustermann (1.0.1)
     netrc (0.11.0)
+    public_suffix (3.0.1)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
@@ -58,7 +68,9 @@ PLATFORMS
 
 DEPENDENCIES
   formatador
+  fuzzy-string-match (~> 1.0, >= 1.0.1)
   json
+  launchy
   require_all
   rest-client
   sinatra-activerecord
