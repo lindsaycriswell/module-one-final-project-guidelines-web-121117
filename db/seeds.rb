@@ -25,7 +25,6 @@ def add_artists
   end
 end
 
-
 def add_albums
   Artist.all.each do |artist_object|
 
@@ -57,7 +56,6 @@ def add_songs
     end
   end
 end
-
 
 def add_songs_playcount
   counter = 1
