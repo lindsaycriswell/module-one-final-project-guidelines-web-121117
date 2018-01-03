@@ -41,12 +41,22 @@ def password(user_instance)
   end
 end
 
-# def create_new_user
-#
-# end
+def create_new_user
+  puts "Please enter a username, or type 'exit' to return to login."
+  user_name = gets.chomp
+  if User.all.find_by(username: user_name)
+    puts "Username already exists."
+    create_new_user
+  elsif user_name == 'exit'
+    login
+  end
+  puts "Please enter a password"
+  password = gets.chomp
+  User.create(username: user_name, password: password)
+end
 
 def main_menu
+  binding.pry
   greeting
-  login
-
+  user = login
 end
