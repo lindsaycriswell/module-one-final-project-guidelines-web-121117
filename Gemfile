@@ -3,5 +3,6 @@ source "https://rubygems.org"
 
 gem "sinatra-activerecord"
 gem "sqlite3"
-gem "pry"
+gem "json"
+gem "rest-client"
 gem "require_all"
