@@ -2,12 +2,11 @@ class User < ActiveRecord::Base
   has_many :playlists
   has_many :songs, through: :playlists
 
-#test comment
   def list_playlists
-    result = ""
+    table_data = []
     self.playlists.each do |playlist_instance|
-      result += "Playlist ID: #{playlist_instance.id}, Name: #{playlist_instance.name}\n"
+      table_data << {"Playlist ID" => playlist_instance.id, "Name" => playlist_instance.name}
     end
-    puts result
+    table_data
   end
 end

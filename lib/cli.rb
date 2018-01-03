@@ -72,30 +72,56 @@ end
 def playlists_menu(user_instance)
   system("clear")
   submenu_welcome(user_instance, "Playlist menu")
-  puts "1. View your Playlists\n2. Create a new Playlist"
-  response = gets.chomp.downcase
-  case response
-  when "1", "view your playlists"
-    user_instance.list_playlists
-  when "2", "create a new playlist"
+  Formatador.display_table(user_instance.list_playlists)
+  puts "Select a playlist by ID, or type 'new' to create a new playlist."
+  playlist_selector(user_instance)
+end
 
+def playlist_selector(user_instance)
+  response = gets.chomp.downcase
+  if response == 'new'
+    #create playlist method
+  elsif (user_instance.playlists.select {|p| p.id == response.to_i }) != []
+    system("clear")
+    Formatador.display_table((user_instance.playlists.select {|p| p.id == response.to_i })[0].list_songs)
+    puts "Please enter a command:\n1. Add a song\n2. Remove a song\n3. Play a song"
+    playlist_accessor(user_instance.playlists.select {|p| p.id == response.to_i }[0], user_instance)
+  else
+    puts "That is not a valid playlist ID. Please try again. Or type 'new' to create a new playlist."
+    playlist_selector(user_instance)
   end
 end
 
-def main_menu
-  # general_greeting
-  # user = login
-  # system("clear")
-  user = User.take(1)[0]
-  user_greeting(user)
+def playlist_accessor(playlist_instance, user_instance)
+
+  response = gets.chomp.downcase
+  case response
+  when "1", "add", "add a song"
+    #add song method
+  when "2", "remove", "remove a song"
+    #remove song method
+  when "3", "play", "play a song"
+    #play song method
+  when 'exit'
+    system("clear")
+    main_menu(user_instance)
+  else
+    puts "Please enter a valid command."
+    playlist_accessor(playlist_instance)
+  end
+  binding.pry
+end
+
+def main_menu(user_instance)
+  user_greeting(user_instance)
   case help
   when "1", "playlist", "playlists"
-    playlists_menu(user)
+    playlists_menu(user_instance)
   when "2", "songs", "song"
-    songs_menu(user)
+    songs_menu(user_instance)
   when "3", "artists", "artist"
-    artists_menu(user)
+    artists_menu(user_instance)
   when "4", "albums", "album"
-    albums_menu(user)
+    albums_menu(user_instance)
   end
 end

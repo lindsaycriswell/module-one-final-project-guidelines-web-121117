@@ -1,3 +1,7 @@
 require_relative '../config/environment'
 
-main_menu
+general_greeting
+# user = login
+system("clear")
+user = User.take(1)[0]
+main_menu(user)
