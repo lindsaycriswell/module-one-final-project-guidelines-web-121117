@@ -5,15 +5,15 @@ def general_greeting
 end
 
 def goodbye
-  puts "Goodbye!"
+  puts "Goodbye!".colorize(:red).bold
 end
 
 def user_greeting(user_instance)
-  puts "Hello #{user_instance.username}! What would you like to do?"
+  puts "Hello #{user_instance.username}! What would you like to do?\n".colorize(:blue).bold
 end
 
 def submenu_welcome(user_instance, menu)
-  puts "Hello #{user_instance.username}, welcome to the #{menu}! What would you like to do?"
+  puts "Hello #{user_instance.username}, welcome to the #{menu}! What would you like to do?\n".colorize(:blue).bold
 end
 
 def help
@@ -23,7 +23,10 @@ def help
 end
 
 def get_username
-  puts "Please select from the following commands:\n\n- If you are an exisiting user, enter your username\n\n- Type 'new' to create an account\n\n- Type 'exit' to exit the program"
+  puts "Please select from the following commands:\n".colorize(:blue).underline
+  puts "- If you are an exisiting user, enter your username\n".colorize(:green)
+  puts "- Type 'new' to create an account\n".colorize(:yellow)
+  puts "- Type 'exit' to exit the program\n".colorize(:red)
   gets.chomp
 end
 
@@ -41,12 +44,12 @@ end
 
 def authenticate_user(input)
   if User.all.find_by(username: input)
-    puts "Please enter your password."
+    puts "Please enter your password.".colorize(:light_blue).bold
     password(User.all.find_by(username: input))
   elsif input == "exit"
     create_new_user
   else
-    puts "Invalid username. Please try again or type 'exit' to create a new user."
+    puts "Invalid username. Please try again or type 'exit' to create a new user.".colorize(:red).bold
     authenticate_user(gets.chomp)
   end
 end
@@ -58,21 +61,21 @@ def password(user_instance)
   elsif password_input == "exit"
     create_new_user
   else
-    puts "Invalid password. Please try again or type 'exit' to create a new user."
+    puts "Invalid password. Please try again or type 'exit' to create a new user.".colorize(:red).bold
     password(user_instance)
   end
 end
 
 def create_new_user
-  puts "Please enter a new username, or type 'exit' to return to login."
+  puts "Please enter a new username, or type 'exit' to return to login.".colorize(:green).bold
   user_name = gets.chomp
   if User.all.find_by(username: user_name)
-    puts "Username already exists."
+    puts "Username already exists.".colorize(:red).bold
     create_new_user
   elsif user_name == 'exit'
     login
   else
-    puts "Please enter a password."
+    puts "Please enter a password.".colorize(:green).bold
     password = gets.chomp
     User.create(username: user_name, password: password)
   end
@@ -81,8 +84,8 @@ end
 
 def playlists_menu(user_instance)
   submenu_welcome(user_instance, "Playlist menu")
-  Formatador.display_table(user_instance.list_playlists)
-  puts "Select a playlist by ID, or type 'new' to create a new playlist."
+  Formatador.indent{Formatador.display_table(user_instance.list_playlists)}
+  puts "Select a playlist by ID, or type 'new' to create a new playlist.".colorize(:blue).bold
   playlist_selector(user_instance)
 end
 
@@ -98,7 +101,7 @@ def delete_playlist(playlist_instance, user_instance)
 end
 
 def add_song_to_playlist(playlist_instance, user_instance)
-  puts "Please enter song ID that you want to add."
+  puts "Please enter song ID that you want to add.".colorize(:blue).bold
   response = gets.chomp
   if response == 'exit'
     system("clear")
@@ -106,13 +109,13 @@ def add_song_to_playlist(playlist_instance, user_instance)
   else
     playlist_instance.add_song(response)
     # playlists_menu(user_instance)
-    Formatador.display_table((user_instance.playlists.select {|p| p.id == playlist_instance.id})[0].list_songs)
+    Formatador.indent{Formatador.display_table((user_instance.playlists.select {|p| p.id == playlist_instance.id})[0].list_songs)}
     playlist_accessor(playlist_instance, user_instance)
   end
 end
 
 def remove_song_from_playlist(playlist_instance, user_instance)
-  puts "Please enter song ID that you want to remove."
+  puts "Please enter song ID that you want to remove.".colorize(:red).bold
   response = gets.chomp
   if response == 'exit'
     system("clear")
@@ -120,7 +123,7 @@ def remove_song_from_playlist(playlist_instance, user_instance)
   else
     playlist_instance.remove_song(response)
     # playlists_menu(user_instance)
-    Formatador.display_table((user_instance.playlists.select {|p| p.id == playlist_instance.id})[0].list_songs)
+    Formatador.indent{Formatador.display_table((user_instance.playlists.select {|p| p.id == playlist_instance.id})[0].list_songs)}
     playlist_accessor(playlist_instance, user_instance)
   end
 end
@@ -128,7 +131,7 @@ end
 def playlist_selector(user_instance)
   response = gets.chomp.downcase
   if response == 'new'
-    puts "Please enter the name of your new Playlist"
+    puts "Please enter the name of your new Playlist".colorize(:blue).bold
     create_new_playlist(user_instance)
   elsif (user_instance.playlists.select {|p| p.id == response.to_i }) != []
     system("clear")
@@ -139,13 +142,14 @@ def playlist_selector(user_instance)
     system("clear")
     main_menu(user_instance)
   else
-    puts "That is not a valid playlist ID. Please try again. Or type 'new' to create a new playlist."
+    puts "That is not a valid playlist ID. Please try again. Or type 'new' to create a new playlist.".colorize(:red).bold
     playlist_selector(user_instance)
   end
 end
 
 def playlist_accessor(playlist_instance, user_instance)
-  puts "Please enter a command:\n1. Add a song\n2. Remove a song\n3. Play a song\n4. Delete Playlist\n5. Return to Playlist Menu\n6. Return to Main Menu"
+  puts "\nPlease enter a command:\n".colorize(:blue).bold
+  puts "1. Add a song\n2. Remove a song\n3. Play a song\n4. Return to Playlist Menu\n5. Return to Main Menu"
   response = gets.chomp.downcase
   case response
   when "1", "add", "add a song"
@@ -164,7 +168,7 @@ def playlist_accessor(playlist_instance, user_instance)
     system("clear")
     main_menu(user_instance)
   else
-    puts "Please enter a valid command."
+    puts "Please enter a valid command.".colorize(:red).bold
     playlist_accessor(playlist_instance, user_instance)
   end
 end
@@ -190,13 +194,13 @@ def songs_menu(user_instance)
     main_menu(user_instance)
   else
     system("clear")
-    puts "please enter a valid command"
+    puts "please enter a valid command".colorize(:red).bold
     songs_menu(user_instance)
   end
 end
 
 def search_song_by_artist(user_instance)
- puts "Please enter the name of the artist"
+ puts "Please enter the name of the artist".colorize(:blue).bold
  response = gets.chomp
  if response == "exit"
    system("clear")
@@ -205,7 +209,7 @@ def search_song_by_artist(user_instance)
    artist = Artist.where("name LIKE  ?", "%#{response}%")[0]
    if !artist
      system("clear")
-     puts "Artist was not found. Please search again."
+     puts "Artist was not found. Please search again.".colorize(:red).bold
      songs_menu(user_instance)
    else
      Formatador.display_table(artist.list_songs, ["Song ID", "Name", "Artist", "Listeners"])
@@ -214,7 +218,7 @@ def search_song_by_artist(user_instance)
 end
 
 def search_song_by_name(user_instance)
-  puts "Please enter the name of the Song"
+  puts "Please enter the name of the Song".colorize(:blue).bold
   response = gets.chomp
   if response == "exit"
     system("clear")
@@ -223,7 +227,7 @@ def search_song_by_name(user_instance)
     array_of_songs = Song.where("name LIKE  ?", "%#{response}%")[0..9]
     if array_of_songs == []
       system("clear")
-      puts "Song was not found. Please search again."
+      puts "Song was not found. Please search again.".colorize(:red).bold
       songs_menu(user_instance)
     else
       Formatador.display_table(song_search_by_name_table_formatter(array_of_songs), ["Song ID", "Name", "Artist", "Listeners"])
@@ -240,18 +244,19 @@ def song_search_by_name_table_formatter(array_of_songs)
 end
 
 def popular_songs(user_instance)
-  puts "How many songs would you like to see?"
+  puts "How many songs would you like to see?".colorize(:blue).bold
   length = gets.chomp
   if length.to_i <= 0 || length.to_i >= 100
     system("clear")
-    puts "Please enter a number between 1 and 100."
+    puts "Please enter a number between 1 and 100.".colorize(:red).bold
     songs_menu(user_instance)
   end
   Formatador.display_table(Song.most_popular_songs(length), ["Song ID", "Name", "Artist", "Listeners"])
 end
 
 def song_sub_menu(user_instance)
-  puts "Please enter a command:\n1. Play song by ID\n2. Add song to playlist\n3. Return to song menu"
+  puts "\nPlease enter a command:\n".colorize(:blue).bold
+  puts "1. Play song by ID\n2. Add song to playlist\n3. Return to song menu"
   response = gets.chomp.downcase
   case response
   when "1", "play song by id", "play"
@@ -267,13 +272,13 @@ def song_sub_menu(user_instance)
     system("clear")
     songs_menu(user_instance)
   else
-    puts "please enter a valid command"
+    puts "please enter a valid command".colorize(:red).bold
     song_sub_menu(user_instance)
   end
 end
 
 def play_song_by_id(user_instance)
-  puts "Please enter a song ID"
+  puts "Please enter a song ID".colorize(:blue).bold
   response = gets.chomp
   if (Song.all.select {|p| p.id == response.to_i }) != []
     Launchy.open((Song.all.select {|p| p.id == response.to_i })[0].url)
@@ -281,7 +286,7 @@ def play_song_by_id(user_instance)
     system("clear")
     main_menu(user_instance)
   else
-    puts "please enter a valid song ID"
+    puts "please enter a valid song ID".colorize(:red).bold
     play_song_by_id(user_instance)
   end
 end
@@ -314,7 +319,7 @@ def main_menu(user_instance)
     exit
   else
     system("clear")
-    puts "Please enter a valid command."
+    puts "Please enter a valid command.".colorize(:red).bold
     main_menu(user_instance)
   end
 end
