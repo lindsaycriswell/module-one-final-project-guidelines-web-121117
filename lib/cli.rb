@@ -87,13 +87,12 @@ end
 def create_new_playlist(user_instance)
   response = gets.chomp
   user_instance.create_playlist(response, user_instance)
-  # if (user_instance.playlists.select {|p| p.name == response }) == []
-  #   Playlist.create(name: response, user_id: user_instance.id)
-  #   playlists_menu(user_instance)
-  # else
-  #   system("clear")
-  #   puts "Playlist name already exists."
-  # end
+end
+
+def delete_playlist(playlist_instance, user_instance)
+  user_instance.delete_playlist(playlist_instance)
+  system("clear")
+  playlists_menu(user_instance)
 end
 
 def add_song_to_playlist(playlist_instance, user_instance)
@@ -144,7 +143,7 @@ def playlist_selector(user_instance)
 end
 
 def playlist_accessor(playlist_instance, user_instance)
-  puts "Please enter a command:\n1. Add a song\n2. Remove a song\n3. Play a song\n4. Return to Playlist Menu\n5. Return to Main Menu"
+  puts "Please enter a command:\n1. Add a song\n2. Remove a song\n3. Play a song\n4. Delete Playlist\n5. Return to Playlist Menu\n6. Return to Main Menu"
   response = gets.chomp.downcase
   case response
   when "1", "add", "add a song"
@@ -154,10 +153,12 @@ def playlist_accessor(playlist_instance, user_instance)
   when "3", "play", "play a song"
     play_song_by_id(user_instance)
     playlist_accessor(playlist_instance, user_instance)
-  when "4", "playlist menu"
+  when "4", "delete"
+    delete_playlist(playlist_instance, user_instance)
+  when "5", "playlist menu"
     system("clear")
     playlists_menu(user_instance)
-  when "5", 'exit'
+  when "6", 'exit'
     system("clear")
     main_menu(user_instance)
   else
