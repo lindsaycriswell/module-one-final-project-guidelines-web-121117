@@ -1,5 +1,7 @@
 def general_greeting
-  puts "Welcome to our Last.fm playlist manager!\n".upcase.colorize(:blue).bold
+  b = Artii::Base.new font: 'doom'
+  puts b.asciify('Last.fm playlist manager!')
+  puts "Welcome to our Last.fm playlist manager!\n\n"
 end
 
 def goodbye
@@ -90,13 +92,12 @@ end
 def create_new_playlist(user_instance)
   response = gets.chomp
   user_instance.create_playlist(response, user_instance)
-  # if (user_instance.playlists.select {|p| p.name == response }) == []
-  #   Playlist.create(name: response, user_id: user_instance.id)
-  #   playlists_menu(user_instance)
-  # else
-  #   system("clear")
-  #   puts "Playlist name already exists."
-  # end
+end
+
+def delete_playlist(playlist_instance, user_instance)
+  user_instance.delete_playlist(playlist_instance)
+  system("clear")
+  playlists_menu(user_instance)
 end
 
 def add_song_to_playlist(playlist_instance, user_instance)
@@ -158,10 +159,12 @@ def playlist_accessor(playlist_instance, user_instance)
   when "3", "play", "play a song"
     play_song_by_id(user_instance)
     playlist_accessor(playlist_instance, user_instance)
-  when "4", "playlist menu"
+  when "4", "delete"
+    delete_playlist(playlist_instance, user_instance)
+  when "5", "playlist menu"
     system("clear")
     playlists_menu(user_instance)
-  when "5", 'exit'
+  when "6", 'exit'
     system("clear")
     main_menu(user_instance)
   else

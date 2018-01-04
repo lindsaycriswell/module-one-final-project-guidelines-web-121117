@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
     table_data
   end
 
+  def delete_playlist(playlist_instance)
+    self.playlists.delete(playlist_instance)
+  end
+
   def create_playlist(playlist_name, user_instance)
     if playlist_name == ""
       system("clear")
