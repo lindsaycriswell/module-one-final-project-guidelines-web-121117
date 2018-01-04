@@ -5,3 +5,5 @@ general_greeting
 system("clear")
 user = User.take(1)[0]
 main_menu(user)
+system("clear")
+goodbye

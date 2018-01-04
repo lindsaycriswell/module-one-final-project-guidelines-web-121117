@@ -3,6 +3,10 @@ def general_greeting
   puts "Welcome to our music database!"
 end
 
+def goodbye
+  puts "Goodbye!"
+end
+
 def user_greeting(user_instance)
   puts "Hello #{user_instance.username}! What would you like to do?"
 end
@@ -97,7 +101,7 @@ def playlist_selector(user_instance)
   elsif (user_instance.playlists.select {|p| p.id == response.to_i }) != []
     system("clear")
     Formatador.display_table((user_instance.playlists.select {|p| p.id == response.to_i })[0].list_songs)
-    puts "Please enter a command:\n1. Add a song\n2. Remove a song\n3. Play a song"
+    # puts "Please enter a command:\n1. Add a song\n2. Remove a song\n3. Play a song"
     playlist_accessor(user_instance.playlists.select {|p| p.id == response.to_i }[0], user_instance)
   else
     puts "That is not a valid playlist ID. Please try again. Or type 'new' to create a new playlist."
@@ -106,7 +110,7 @@ def playlist_selector(user_instance)
 end
 
 def playlist_accessor(playlist_instance, user_instance)
-
+  puts "Please enter a command:\n1. Add a song\n2. Remove a song\n3. Play a song\n4. Return to Playlist Menu\n5. Return to Main Menu"
   response = gets.chomp.downcase
   case response
   when "1", "add", "add a song"
@@ -114,15 +118,18 @@ def playlist_accessor(playlist_instance, user_instance)
   when "2", "remove", "remove a song"
     #remove song method
   when "3", "play", "play a song"
-    #play song method
-  when 'exit'
+    play_song_by_id(user_instance)
+    playlist_accessor(playlist_instance, user_instance)
+  when "4", "playlist menu"
+    system("clear")
+    playlists_menu(user_instance)
+  when "5", 'exit'
     system("clear")
     main_menu(user_instance)
   else
     puts "Please enter a valid command."
-    playlist_accessor(playlist_instance)
+    playlist_accessor(playlist_instance, user_instance)
   end
-  binding.pry
 end
 
 #-----------------Song Methods---------------------------
