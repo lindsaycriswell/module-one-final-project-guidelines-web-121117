@@ -4,8 +4,6 @@ class Playlist < ActiveRecord::Base
   has_many :songs, through: :playlist_song_relationships
 
   def list_songs
-
-
     self.songs.map do |song_instance|
       {"Song ID" => song_instance.id, "Name" => song_instance.name, "Artist" => song_instance.album.artist.name}
     end

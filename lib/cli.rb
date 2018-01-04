@@ -1,5 +1,5 @@
 def general_greeting
-  puts "Welcome to our Last.fm playlist manager!"
+  puts "Welcome to our Last.fm playlist manager!\n\n"
 end
 
 def goodbye
@@ -15,12 +15,13 @@ def submenu_welcome(user_instance, menu)
 end
 
 def help
-  puts "1. Playlists\n2. Songs\n3. Artists\n"
+  puts "1. View your Playlists\n2. Search for Songs\n"
+  # 3. Artists\n
   gets.chomp.downcase
 end
 
 def get_username
-  puts "Please select from the following commands:\nIf you are an exisiting user, enter your username\nType 'new' to create an account\nType 'exit' to exit the program"
+  puts "Please select from the following commands:\n\n- If you are an exisiting user, enter your username\n\n- Type 'new' to create an account\n\n- Type 'exit' to exit the program"
   gets.chomp
 end
 
@@ -117,7 +118,9 @@ def remove_song_from_playlist(playlist_instance, user_instance)
     playlists_menu(user_instance)
   else
     playlist_instance.remove_song(response)
-    playlists_menu(user_instance)
+    # playlists_menu(user_instance)
+    Formatador.display_table((user_instance.playlists.select {|p| p.id == playlist_instance.id})[0].list_songs)
+    playlist_accessor(playlist_instance, user_instance)
   end
 end
 
@@ -132,6 +135,7 @@ def playlist_selector(user_instance)
     # puts "Please enter a command:\n1. Add a song\n2. Remove a song\n3. Play a song"
     playlist_accessor(user_instance.playlists.select {|p| p.id == response.to_i }[0], user_instance)
   elsif response == 'exit'
+    system("clear")
     main_menu(user_instance)
   else
     puts "That is not a valid playlist ID. Please try again. Or type 'new' to create a new playlist."
@@ -166,7 +170,7 @@ end
 
 def songs_menu(user_instance)
   submenu_welcome(user_instance, "Songs menu")
-  puts "1. Find most popular songs\n2. Search songs by Artist\n3. Search songs by name"
+  puts "1. Find most popular Songs\n2. Search songs by Artist\n3. Search Songs by Name"
   response = gets.chomp.downcase
   case response
   when "1", "find most popular songs", "popular"
@@ -178,7 +182,11 @@ def songs_menu(user_instance)
   when "3", "search songs by name", "name"
     search_song_by_name(user_instance)
     song_sub_menu(user_instance)
+  when "exit"
+    system("clear")
+    main_menu(user_instance)
   else
+    system("clear")
     puts "please enter a valid command"
     songs_menu(user_instance)
   end
@@ -187,16 +195,37 @@ end
 def search_song_by_artist(user_instance)
  puts "Please enter the name of the artist"
  response = gets.chomp
- artist = Artist.where("name LIKE  ?", "%#{response}%")[0]
- Formatador.display_table(artist.list_songs, ["Song ID", "Name", "Artist", "Listeners"])
+ if response == "exit"
+   system("clear")
+   songs_menu(user_instance)
+ else
+   artist = Artist.where("name LIKE  ?", "%#{response}%")[0]
+   if !artist
+     system("clear")
+     puts "Artist was not found. Please search again."
+     songs_menu(user_instance)
+   else
+     Formatador.display_table(artist.list_songs, ["Song ID", "Name", "Artist", "Listeners"])
+   end
+ end
 end
 
 def search_song_by_name(user_instance)
-  puts "Please enter the name of the song"
+  puts "Please enter the name of the Song"
   response = gets.chomp
-  array_of_songs = Song.where("name LIKE  ?", "%#{response}%")[0..9]
-  system("clear")
-  Formatador.display_table(song_search_by_name_table_formatter(array_of_songs), ["Song ID", "Name", "Artist", "Listeners"])
+  if response == "exit"
+    system("clear")
+    songs_menu(user_instance)
+  else
+    array_of_songs = Song.where("name LIKE  ?", "%#{response}%")[0..9]
+    if array_of_songs == []
+      system("clear")
+      puts "Song was not found. Please search again."
+      songs_menu(user_instance)
+    else
+      Formatador.display_table(song_search_by_name_table_formatter(array_of_songs), ["Song ID", "Name", "Artist", "Listeners"])
+    end
+  end
 end
 
 def song_search_by_name_table_formatter(array_of_songs)
@@ -210,6 +239,11 @@ end
 def popular_songs(user_instance)
   puts "How many songs would you like to see?"
   length = gets.chomp
+  if length.to_i <= 0 || length.to_i >= 100
+    system("clear")
+    puts "Please enter a number between 1 and 100."
+    songs_menu(user_instance)
+  end
   Formatador.display_table(Song.most_popular_songs(length), ["Song ID", "Name", "Artist", "Listeners"])
 end
 
@@ -226,6 +260,9 @@ def song_sub_menu(user_instance)
   when "3", "return to song menu", "menu"
     system("clear")
     songs_menu(user_instance)
+  when "exit"
+    system("clear")
+    songs_menu(user_instance)
   else
     puts "please enter a valid command"
     song_sub_menu(user_instance)
@@ -237,11 +274,22 @@ def play_song_by_id(user_instance)
   response = gets.chomp
   if (Song.all.select {|p| p.id == response.to_i }) != []
     Launchy.open((Song.all.select {|p| p.id == response.to_i })[0].url)
+  elsif response == "exit"
+    system("clear")
+    main_menu(user_instance)
   else
     puts "please enter a valid song ID"
     play_song_by_id(user_instance)
   end
 end
+
+
+#-----------------Artist Methods---------------------------
+# def artists_menu
+#
+# end
+
+
 
 #-----------------Menu Methods---------------------------
 
@@ -254,8 +302,16 @@ def main_menu(user_instance)
   when "2", "songs", "song"
     system("clear")
     songs_menu(user_instance)
-  when "3", "artists", "artist"
+  # when "3", "artists", "artist"
+  #   system("clear")
+  #   artists_menu(user_instance)
+  when "exit"
     system("clear")
-    artists_menu(user_instance)
+    goodbye
+    exit
+  else
+    system("clear")
+    puts "Please enter a valid command."
+    main_menu(user_instance)
   end
 end
