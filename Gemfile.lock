@@ -15,6 +15,7 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
+    colorize (0.8.1)
     concurrent-ruby (1.0.5)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
@@ -62,6 +63,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  colorize
   formatador
   json
   launchy
