@@ -10,4 +10,22 @@ class User < ActiveRecord::Base
     table_data
   end
 
+  def create_playlist(playlist_name, user_instance)
+    if playlist_name == ""
+      system("clear")
+      puts "Playlist name cannot be blank."
+      playlists_menu(user_instance)
+    else
+      if (self.playlists.select {|p| p.name == playlist_name }) == []
+        self.playlists << Playlist.create(name: playlist_name, user_id: self.id)
+        playlists_menu(user_instance)
+      elsif playlist_name == 'exit'
+        playlists_menu(user_instance)
+      else
+        system("clear")
+        puts "Playlist name already exists."
+        playlists_menu(user_instance)
+      end
+    end
+  end
 end
