@@ -1,4 +1,6 @@
 def general_greeting
+  b = Artii::Base.new font: 'doom'
+  puts b.asciify('Last.fm playlist manager!')
   puts "Welcome to our Last.fm playlist manager!\n\n"
 end
 

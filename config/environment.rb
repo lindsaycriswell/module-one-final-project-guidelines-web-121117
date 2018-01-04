@@ -4,6 +4,9 @@ require 'rest-client'
 require 'pry'
 require 'formatador'
 require 'launchy'
+require 'artii'
+require 'colorize'
+require 'colorized_string'
 
 
 Bundler.require
