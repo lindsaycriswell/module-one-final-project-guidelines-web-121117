@@ -79,7 +79,7 @@ end
 
 def playlists_menu(user_instance)
   submenu_welcome(user_instance, "Playlist menu")
-  Formatador.display_table(user_instance.list_playlists)
+  Formatador.indent{Formatador.display_table(user_instance.list_playlists)}
   puts "Select a playlist by ID, or type 'new' to create a new playlist."
   playlist_selector(user_instance)
 end
@@ -105,7 +105,7 @@ def add_song_to_playlist(playlist_instance, user_instance)
   else
     playlist_instance.add_song(response)
     # playlists_menu(user_instance)
-    Formatador.display_table((user_instance.playlists.select {|p| p.id == playlist_instance.id})[0].list_songs)
+    Formatador.indent{Formatador.display_table((user_instance.playlists.select {|p| p.id == playlist_instance.id})[0].list_songs)}
     playlist_accessor(playlist_instance, user_instance)
   end
 end
@@ -119,7 +119,7 @@ def remove_song_from_playlist(playlist_instance, user_instance)
   else
     playlist_instance.remove_song(response)
     # playlists_menu(user_instance)
-    Formatador.display_table((user_instance.playlists.select {|p| p.id == playlist_instance.id})[0].list_songs)
+    Formatador.indent{Formatador.display_table((user_instance.playlists.select {|p| p.id == playlist_instance.id})[0].list_songs)}
     playlist_accessor(playlist_instance, user_instance)
   end
 end
