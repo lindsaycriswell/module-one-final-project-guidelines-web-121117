@@ -149,7 +149,7 @@ end
 
 def playlist_accessor(playlist_instance, user_instance)
   puts "\nPlease enter a command:\n".colorize(:blue).bold
-  puts "1. Add a song\n2. Remove a song\n3. Play a song\n4. Return to Playlist Menu\n5. Return to Main Menu"
+  puts "1. Add a song\n2. Remove a song\n3. Play a song\n4. Delete playlist\n5. Return to Playlist Menu\n6. Return to Main Menu"
   response = gets.chomp.downcase
   case response
   when "1", "add", "add a song"
