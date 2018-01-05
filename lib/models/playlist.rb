@@ -14,7 +14,7 @@ class Playlist < ActiveRecord::Base
       # PlaylistSongRelationship.create(playlist_id: self.id, song_id: add_song_id)
       self.songs << Song.find(add_song_id)
     else
-      puts "This song is already on this playlist."
+      puts "This song is already on this playlist.".colorize(:red).bold
     end
   end
 
@@ -23,7 +23,7 @@ class Playlist < ActiveRecord::Base
       PlaylistSongRelationship.delete((playlist_song_relationships.all.select {|psr| psr.song_id == remove_song_id.to_i && psr.playlist_id == self.id})[0].id)
       self.songs.delete(Song.find(remove_song_id))
     else
-      puts "This song is not on this playlist."
+      puts "This song is not on this playlist.".colorize(:red).bold
     end
   end
 

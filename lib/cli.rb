@@ -1,11 +1,13 @@
 def general_greeting
   b = Artii::Base.new font: 'doom'
-  puts b.asciify('Last.fm playlist manager!')
-  puts "Welcome to our Last.fm playlist manager!\n\n"
+  puts b.asciify('Last.fm playlist manager!').colorize(:cyan).bold
+  puts "Welcome to the Last.fm playlist manager!\n\n".colorize(:magenta)
 end
 
 def goodbye
-  puts "Goodbye!".colorize(:red).bold
+  system("clear")
+  a = Artii::Base.new font: 'doom'
+  puts a.asciify('Goodbye!').colorize(:cyan).bold
 end
 
 def user_greeting(user_instance)
@@ -26,7 +28,7 @@ def get_username
   puts "Please select from the following commands:\n".colorize(:blue).underline
   puts "- If you are an exisiting user, enter your username\n".colorize(:green)
   puts "- Type 'new' to create an account\n".colorize(:yellow)
-  puts "- Type 'exit' to exit the program\n".colorize(:red)
+  puts "- Type 'exit' at any time in the program to go back a menu\n".colorize(:red)
   gets.chomp
 end
 
@@ -49,8 +51,8 @@ def authenticate_user(input)
   elsif input == "exit"
     create_new_user
   else
-    puts "Invalid username. Please try again or type 'exit' to create a new user.".colorize(:red).bold
-    authenticate_user(gets.chomp)
+    puts "Invalid username. Please try again.".colorize(:red).bold
+    login
   end
 end
 
@@ -74,10 +76,24 @@ def create_new_user
     create_new_user
   elsif user_name == 'exit'
     login
+  elsif user_name.split(" ").empty?
+    puts "Invalid user name!"
+    create_new_user
+  elsif user_name.match(/\d/)
+    puts "The username can't contain numbers!"
+    create_new_user
+  elsif user_name.match(/ /)
+    puts "\nThe username can't contain spaces"
+    puts " "
+    create_new_user
   else
     puts "Please enter a password.".colorize(:green).bold
     password = gets.chomp
-    User.create(username: user_name, password: password)
+    if password == "exit"
+      login
+    else
+      User.create(username: user_name, password: password)
+    end
   end
 end
 #-----------------Playlist Methods---------------------------
@@ -95,7 +111,7 @@ def create_new_playlist(user_instance)
 end
 
 def delete_playlist(playlist_instance, user_instance)
-  user_instance.delete_playlist(playlist_instance)
+  user_instance.delete_user_playlist(playlist_instance)
   system("clear")
   playlists_menu(user_instance)
 end
@@ -106,6 +122,9 @@ def add_song_to_playlist(playlist_instance, user_instance)
   if response == 'exit'
     system("clear")
     playlists_menu(user_instance)
+  elsif (Song.all.select {|p| p.id == response.to_i }) == []
+    puts "The song id you entered does not exist".colorize(:red).bold
+    add_song_to_playlist(playlist_instance, user_instance)
   else
     playlist_instance.add_song(response)
     # playlists_menu(user_instance)
