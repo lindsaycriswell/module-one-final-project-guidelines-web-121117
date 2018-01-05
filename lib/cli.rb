@@ -243,6 +243,7 @@ def search_song_by_name(user_instance)
     system("clear")
     songs_menu(user_instance)
   else
+#----------------------------example------------------------
     array_of_songs = Song.where("name LIKE  ?", "%#{response}%")[0..9]
     if array_of_songs == []
       system("clear")

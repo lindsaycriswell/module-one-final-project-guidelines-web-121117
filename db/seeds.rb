@@ -5,14 +5,12 @@ def add_artists
   artist_hash = Hash.new
 
   while counter < 11
-
+    # --------gets the top tracks from api-----------
     h = RestClient.get("http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=1137a74313e9b411a812f3746dafe90f&format=json&page=#{counter}")
     hash = JSON.parse(h)
-
-    hash["tracks"]["track"].each do |thing|
-      # artist_name_array << thing["artist"]["name"]
-      # artist_id_array << thing["artist"]["mbid"]
-      artist_hash[thing["artist"]["name"]] = thing["artist"]["mbid"]
+    # -------iterates over top tracks to create artists in the database--------
+    hash["tracks"]["track"].each do |song_instance|
+      artist_hash[song_instance["artist"]["name"]] = song_instance["artist"]["mbid"]
     end
     counter += 1
   end
